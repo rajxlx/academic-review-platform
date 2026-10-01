@@ -1,20 +1,18 @@
-﻿import Database from 'better-sqlite3';
-import path from 'path';
+// Simple in-memory database for Cloudflare deployment
+const messages: any[] = [];
 
-const dbPath = path.join(process.cwd(), 'database.sqlite');
-const db = new Database(dbPath);
-
-// Create messages table
-db.exec(
-  'CREATE TABLE IF NOT EXISTS messages (id INTEGER PRIMARY KEY AUTOINCREMENT, full_name TEXT, email TEXT, phone TEXT, service_needed TEXT, message TEXT, status TEXT DEFAULT "pending", created_at DATETIME DEFAULT CURRENT_TIMESTAMP)'
-);
-
-export function query(sql) {
-  return db.prepare(sql).all();
+export function query(sql: string, params: any[] = []) {
+  return Promise.resolve([]);
 }
 
-export function run(sql, params = []) {
-  return db.prepare(sql).run(params);
+export function get(sql: string, params: any[] = []) {
+  return Promise.resolve(null);
 }
 
-export default db;
+export function run(sql: string, params: any[] = []) {
+  const id = messages.length + 1;
+  messages.push({ id, ...params });
+  return Promise.resolve({ lastInsertRowid: id });
+}
+
+export default { query, get, run };

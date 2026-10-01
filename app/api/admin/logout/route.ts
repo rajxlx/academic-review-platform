@@ -7,7 +7,7 @@ export async function POST() {
   });
   response.cookies.set('adminAuth', '', {
     httpOnly: true,
-    secure: false,
+    secure: true,
     sameSite: 'lax',
     maxAge: 0,
     path: '/'

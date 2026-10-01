@@ -1,332 +1,283 @@
-﻿'use client';
+'use client'
 
-import Link from 'next/link';
-import { motion } from 'framer-motion';
-import {
-  Users, Briefcase, Award, Zap, ChevronRight, Star,
-  Code, GitBranch, Target, Rocket, Crown, TrendingUp,
-  ArrowRight, Calendar, Clock, CheckCircle, Play,
-  Quote, GraduationCap, Trophy, Sparkles, Brain,
-  Cpu, Database, Shield, Layers, Lightbulb, GitPullRequest
-} from 'lucide-react';
+import Link from 'next/link'
+import Image from 'next/image'
+import { useEffect, useState } from 'react'
+import { ArrowRight, Award, Users, Briefcase, Zap, Code, Database, Brain, Cpu, Globe, MessageSquare, Wrench, PackageCheck, IndianRupee } from 'lucide-react'
 
-const fadeInUp = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
-};
+const BUILD_LOG = [
+  '$ receiving project brief...',
+  '$ scoping requirements...',
+  '$ writing code by hand...',
+  '$ testing build...',
+  '$ shipping complete_project.zip ✓',
+]
 
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15
+function TypedLog() {
+  const [lineIndex, setLineIndex] = useState(0)
+  const [charIndex, setCharIndex] = useState(0)
+  const [done, setDone] = useState(false)
+
+  useEffect(() => {
+    if (done) return
+    const current = BUILD_LOG[lineIndex]
+    if (charIndex < current.length) {
+      const t = setTimeout(() => setCharIndex(charIndex + 1), 28)
+      return () => clearTimeout(t)
+    } else if (lineIndex < BUILD_LOG.length - 1) {
+      const t = setTimeout(() => { setLineIndex(lineIndex + 1); setCharIndex(0) }, 500)
+      return () => clearTimeout(t)
+    } else {
+      setDone(true)
     }
-  }
-};
-
-export default function Home() {
-  const stats = [
-    { icon: Users, label: 'Students Helped', value: '5000+' },
-    { icon: Briefcase, label: 'Projects Completed', value: '10,000+' },
-    { icon: Award, label: 'Satisfaction Rate', value: '98%' },
-    { icon: Zap, label: 'Expert Available', value: '100+' }
-  ];
-
-  const features = [
-    { icon: Brain, title: 'AI-Powered Matching', desc: 'Get matched with the perfect expert for your project using our intelligent algorithm.' },
-    { icon: Code, title: 'Code Reviews & Support', desc: 'Expert code reviews, debugging help, and complete project guidance.' },
-    { icon: Layers, title: 'End-to-End Solutions', desc: 'From ideation to delivery - we handle everything for your academic success.' },
-    { icon: Shield, title: 'Quality Assured', desc: 'All work is 100% original with plagiarism checks and quality guarantees.' },
-  ];
-
-  const journey = [
-    { icon: GitBranch, title: 'Submit Your Request', desc: 'Tell us about your project, deadline, and requirements.' },
-    { icon: GitPullRequest, title: 'Get Matched', desc: 'Our AI matches you with the perfect expert for your needs.' },
-    { icon: Code, title: 'Work Together', desc: 'Collaborate with your expert to build your project step by step.' },
-    { icon: Rocket, title: 'Deliver & Launch', desc: 'Get your complete project delivered on time with full support.' },
-  ];
-
-  const testimonials = [
-    { name: 'Rahul Singh', role: 'B.Tech Student', text: 'This platform helped me complete my major project with top grades! The experts are amazing.', rating: 5 },
-    { name: 'Priya Sharma', role: 'M.Tech Student', text: 'Got my research paper published with expert guidance. Highly recommend!', rating: 5 },
-    { name: 'Amit Kumar', role: 'College Student', text: 'The best platform for academic support. My practical assignments were perfect!', rating: 5 },
-  ];
-
-  const services = [
-    { icon: Code, title: 'Programming Projects', desc: 'Web, mobile, desktop apps & more', color: 'from-blue-500 to-blue-600' },
-    { icon: Brain, title: 'Research & Analysis', desc: 'Papers, case studies, data analysis', color: 'from-purple-500 to-purple-600' },
-    { icon: Cpu, title: 'AI & ML Projects', desc: 'Machine learning, AI solutions', color: 'from-pink-500 to-pink-600' },
-    { icon: Database, title: 'Database Design', desc: 'SQL, NoSQL, system design', color: 'from-indigo-500 to-indigo-600' },
-    { icon: Trophy, title: 'Major Projects', desc: 'Final year, capstone projects', color: 'from-orange-500 to-orange-600' },
-    { icon: Lightbulb, title: 'College Events', desc: 'Hackathons, competitions, workshops', color: 'from-green-500 to-green-600' },
-  ];
+  }, [charIndex, lineIndex, done])
 
   return (
-    <div className="min-h-screen bg-[#0A0E17] text-white overflow-x-hidden">
-      
-      {/* HERO SECTION */}
-      <section className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden border-b border-[#1E293B]">
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiMyQzNBNUIiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJNMzYgMzR2MkgyNHYtMmgxMnptMCAydjJoLTEydi0yaDEyeiIvPjwvZz48L2c+PC9zdmc+')] opacity-20"></div>
-        
-        <div className="absolute top-[-30%] left-[-10%] w-[600px] h-[600px] bg-blue-600/20 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-[-30%] right-[-10%] w-[600px] h-[600px] bg-purple-600/20 rounded-full blur-3xl"></div>
+    <div className="font-mono text-sm text-left">
+      {BUILD_LOG.slice(0, lineIndex).map((l, i) => (
+        <p key={i} className="text-[#5B8C7B]">{l}</p>
+      ))}
+      <p className="text-[#E8A33D]">
+        {BUILD_LOG[lineIndex].slice(0, charIndex)}
+        <span className="inline-block w-2 h-4 bg-[#E8A33D] ml-0.5 align-middle animate-blink"></span>
+      </p>
+    </div>
+  )
+}
 
-        <div className="relative z-10 max-w-6xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-6 border border-blue-500/30 rounded-full bg-blue-500/10 text-sm text-blue-400">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
-              </span>
-              Registrations Open for 2026-27
+export default function Home() {
+  return (
+    <div className="min-h-screen bg-[#0F1115] text-[#EDE6D6] overflow-x-hidden font-sans selection:bg-[#E8A33D]/30" style={{ fontFamily: "'Space Grotesk', system-ui, sans-serif" }}>
+
+      {/* ============================================
+      HERO
+      ============================================ */}
+      <section className="relative min-h-[100vh] flex items-center justify-center px-4 overflow-hidden">
+        {/* Blueprint grid */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#E8A33D08_1px,transparent_1px),linear-gradient(to_bottom,#E8A33D08_1px,transparent_1px)] bg-[size:40px_40px]"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#E8A33D0d_1px,transparent_1px),linear-gradient(to_bottom,#E8A33D0d_1px,transparent_1px)] bg-[size:200px_200px]"></div>
+
+        {/* Corner tick marks — drafting-sheet feel */}
+        <div className="absolute top-6 left-6 w-8 h-8 border-l border-t border-[#E8A33D]/30"></div>
+        <div className="absolute top-6 right-6 w-8 h-8 border-r border-t border-[#E8A33D]/30"></div>
+        <div className="absolute bottom-6 left-6 w-8 h-8 border-l border-b border-[#E8A33D]/30"></div>
+        <div className="absolute bottom-6 right-6 w-8 h-8 border-r border-b border-[#E8A33D]/30"></div>
+
+        {/* Grain */}
+        <div className="absolute inset-0 opacity-[0.04] mix-blend-overlay bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxmaWx0ZXIgaWQ9Im4iPjxmZVR1cmJ1bGVuY2UgdHlwZT0iZnJhY3RhbE5vaXNlIiBiYXNlRnJlcXVlbmN5PSIwLjkiIG51bU9jdGF2ZXM9IjQiIC8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsdGVyPSJ1cmwoI24pIiAvPjwvc3ZnPg==')]"></div>
+
+        <div className="relative z-10 max-w-5xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-8 border border-[#E8A33D]/30 text-xs font-mono uppercase tracking-[0.15em] text-[#E8A33D]">
+            [ open for 2026-27 intake ]
+          </div>
+
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-[1.05] tracking-tight">
+            <span className="text-[#EDE6D6]">Got a project?</span>
+            <span className="block mt-2 text-[#E8A33D]">I'll build it, by hand.</span>
+          </h1>
+
+          <p className="text-lg md:text-xl text-[#9C9A8F] max-w-xl mx-auto mb-10 leading-relaxed">
+            Send me your project — college assignment, final year build, or a real product idea.
+            I write it myself and hand you a complete, working infrastructure.
+          </p>
+
+          {/* Terminal signature element */}
+          <div className="max-w-md mx-auto mb-10 rounded-lg border border-[#E8A33D]/20 bg-black/40 backdrop-blur-sm px-5 py-4 text-left">
+            <div className="flex gap-1.5 mb-3">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#E8A33D]/40"></span>
+              <span className="w-2.5 h-2.5 rounded-full bg-[#5B8C7B]/40"></span>
+              <span className="w-2.5 h-2.5 rounded-full bg-[#9C9A8F]/40"></span>
             </div>
-
-            <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold leading-tight tracking-tight">
-              India's Largest
-              <span className="block mt-2 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                Academic Support
-                <span className="text-white font-mono text-3xl md:text-5xl ml-2">/</span>
-                <span className="text-white">Engine</span>
-              </span>
-            </h1>
-
-            <p className="mt-6 text-lg sm:text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
-              Get expert help for assessments, practicals, major projects, and college events.
-              <span className="text-blue-400 font-medium block sm:inline"> #BuildTheFuture</span>
-            </p>
-
-            <div className="mt-10 flex flex-wrap gap-4 justify-center">
-              <Link href="/register">
-                <button className="group relative px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl font-semibold text-white shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 hover:scale-105">
-                  <span className="relative z-10 flex items-center gap-2">
-                    Get Started Free
-                    <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </span>
-                  <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                </button>
-              </Link>
-              <Link href="/contact">
-                <button className="px-8 py-4 border border-gray-600 rounded-xl font-semibold text-gray-300 hover:bg-white/5 hover:border-gray-400 transition-all duration-300">
-                  Our Services
-                </button>
-              </Link>
-            </div>
-
-            <motion.div 
-              variants={staggerContainer}
-              initial="hidden"
-              animate="visible"
-              className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto"
-            >
-              {stats.map((stat, i) => (
-                <motion.div key={i} variants={fadeInUp} className="text-center">
-                  <stat.icon className="w-8 h-8 mx-auto text-blue-400 mb-2" />
-                  <p className="text-2xl font-bold text-white">{stat.value}</p>
-                  <p className="text-sm text-gray-400">{stat.label}</p>
-                </motion.div>
-              ))}
-            </motion.div>
-          </motion.div>
-        </div>
-
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-          <ChevronRight className="w-6 h-6 text-gray-500 rotate-90" />
-        </div>
-      </section>
-
-      {/* FEATURES SECTION */}
-      <section className="py-20 px-4 border-b border-[#1E293B]">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl font-bold">System Status: <span className="text-green-400">Online</span></h2>
-            <p className="text-gray-400 mt-4 text-lg">The AI era is no longer a future prediction. It is the baseline reality.</p>
-          </motion.div>
-
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
-          >
-            {features.map((feature, i) => (
-              <motion.div key={i} variants={fadeInUp} className="group relative bg-[#111827] rounded-2xl p-6 border border-[#1E293B] hover:border-blue-500/50 transition-all hover:-translate-y-2">
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <feature.icon className="w-12 h-12 text-blue-400 mb-4" />
-                <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-                <p className="text-gray-400 text-sm leading-relaxed">{feature.desc}</p>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* JOURNEY SECTION */}
-      <section className="py-20 px-4 border-b border-[#1E293B]">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl font-bold">Your Journey to <span className="text-purple-400">Success</span></h2>
-            <p className="text-gray-400 mt-4 text-lg">You don't join a track. You forge your own path.</p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {journey.map((step, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                viewport={{ once: true }}
-                className="relative"
-              >
-                <div className="bg-[#111827] rounded-2xl p-6 border border-[#1E293B] text-center h-full">
-                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-blue-500/20">
-                    <step.icon className="w-8 h-8 text-blue-400" />
-                  </div>
-                  <div className="text-2xl font-mono text-gray-700 mb-2">0{i+1}</div>
-                  <h3 className="font-semibold mb-2">{step.title}</h3>
-                  <p className="text-sm text-gray-400">{step.desc}</p>
-                </div>
-                {i < journey.length - 1 && (
-                  <div className="hidden lg:block absolute top-1/2 -right-3 transform -translate-y-1/2">
-                    <ArrowRight className="w-6 h-6 text-gray-700" />
-                  </div>
-                )}
-              </motion.div>
-            ))}
+            <TypedLog />
           </div>
-        </div>
-      </section>
 
-      {/* SERVICES SECTION */}
-      <section className="py-20 px-4 border-b border-[#1E293B]">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl font-bold">Our <span className="text-pink-400">Services</span></h2>
-            <p className="text-gray-400 mt-4 text-lg">Click any service to get started → Contact us</p>
-          </motion.div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {services.map((service, i) => (
-              <Link href="/contact" key={i}>
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.4, delay: i * 0.05 }}
-                  viewport={{ once: true }}
-                  className="group bg-[#111827] rounded-2xl p-6 border border-[#1E293B] hover:border-purple-500/50 transition-all hover:-translate-y-2 hover:shadow-xl hover:shadow-purple-500/10 cursor-pointer"
-                >
-                  <div className={"w-12 h-12 bg-gradient-to-br " + service.color + " rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform"}>
-                    <service.icon className="w-6 h-6 text-white" />
-                  </div>
-                  <h3 className="font-semibold text-lg mb-1 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r from-blue-400 to-purple-400 transition-all">
-                    {service.title}
-                  </h3>
-                  <p className="text-sm text-gray-400">{service.desc}</p>
-                  <div className="mt-4 flex items-center text-blue-400 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
-                    Contact us →
-                  </div>
-                </motion.div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* TESTIMONIALS SECTION */}
-      <section className="py-20 px-4 border-b border-[#1E293B]">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl font-bold">Hear from our <span className="text-yellow-400">winners</span></h2>
-            <p className="text-gray-400 mt-4 text-lg">Real students. Real stories. Real success.</p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {testimonials.map((testimonial, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                viewport={{ once: true }}
-                className="bg-[#111827] rounded-2xl p-6 border border-[#1E293B] hover:border-blue-500/30 transition-all"
-              >
-                <div className="flex text-yellow-400 mb-3">
-                  {[...Array(5)].map((_, j) => (
-                    <Star key={j} className="w-4 h-4 fill-current" />
-                  ))}
-                </div>
-                <p className="text-gray-300 text-sm leading-relaxed">"{testimonial.text}"</p>
-                <div className="mt-4 flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
-                    <span className="text-white font-bold text-sm">{testimonial.name.charAt(0)}</span>
-                  </div>
-                  <div>
-                    <p className="font-semibold text-sm">{testimonial.name}</p>
-                    <p className="text-xs text-gray-500">{testimonial.role}</p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA SECTION */}
-      <section className="py-20 px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="bg-gradient-to-br from-blue-600/20 via-purple-600/20 to-pink-600/20 rounded-3xl p-12 border border-blue-500/20"
-          >
-            <h2 className="text-4xl font-bold mb-4">Ready to <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Build</span> the Future?</h2>
-            <p className="text-gray-400 text-lg mb-8 max-w-2xl mx-auto">
-              Join thousands of students who've already succeeded. Your academic journey starts here.
-            </p>
+          <div className="flex flex-wrap gap-4 justify-center">
             <Link href="/contact">
-              <button className="group relative px-10 py-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl font-semibold text-white shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 hover:scale-105">
-                <span className="relative z-10 flex items-center gap-2">
-                  Contact Us Now
-                  <Rocket className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                </span>
-                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <button className="group px-8 py-4 font-semibold text-[#0F1115] bg-[#E8A33D] hover:bg-[#F0B155] transition-all hover:-translate-y-0.5 flex items-center gap-2">
+                Tell Me About Your Project
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
             </Link>
-          </motion.div>
+            <Link href="#how-it-works">
+              <button className="px-8 py-4 font-semibold text-[#EDE6D6] border border-[#EDE6D6]/25 hover:border-[#EDE6D6]/50 hover:bg-white/[0.03] transition-all">
+                How It Works
+              </button>
+            </Link>
+          </div>
+
+          <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-2xl mx-auto font-mono">
+            {[
+              { icon: Users, value: '5000+', label: 'students helped' },
+              { icon: Briefcase, value: '10,000+', label: 'projects built' },
+              { icon: Award, value: '98%', label: 'satisfaction' },
+              { icon: Zap, value: '100+', label: 'experts involved' },
+            ].map((stat) => (
+              <div key={stat.label} className="text-center">
+                <div className="flex justify-center mb-2"><stat.icon className="w-5 h-5 text-[#E8A33D]" /></div>
+                <p className="text-2xl font-bold text-[#EDE6D6]">{stat.value}</p>
+                <p className="text-[10px] text-[#7A786F] mt-1 uppercase tracking-wider">{stat.label}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
+
+      {/* ============================================
+      HOW IT WORKS — circuit-trace layout
+      ============================================ */}
+      <section id="how-it-works" className="py-24 px-4 relative border-t border-[#E8A33D]/10">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#E8A33D] mb-3">// process</p>
+            <h2 className="text-4xl font-bold mb-4 tracking-tight">Simple, direct, no middlemen</h2>
+            <p className="text-[#9C9A8F] max-w-xl mx-auto">You talk to me directly. I build your project myself. You get something that actually works.</p>
+          </div>
+
+          <div className="relative grid md:grid-cols-4 gap-6">
+            {/* Dashed circuit trace connecting the steps */}
+            <div className="hidden md:block absolute top-[52px] left-[12.5%] right-[12.5%] border-t-2 border-dashed border-[#E8A33D]/25"></div>
+
+            {[
+              { icon: MessageSquare, tag: 'STEP/01', title: 'You Contact Me', desc: 'Tell me what you need — college project, final year submission, or a real idea.' },
+              { icon: Wrench, tag: 'STEP/02', title: 'I Build It', desc: 'I personally write your project — real code, real infrastructure, not a template.' },
+              { icon: PackageCheck, tag: 'STEP/03', title: 'Complete Handover', desc: 'Fully working, ready to present — with an explanation of how it works.' },
+              { icon: IndianRupee, tag: 'STEP/04', title: 'Pay When Done', desc: 'Clear pricing agreed up front. No hidden costs, no surprises.' },
+            ].map((item) => (
+              <div key={item.title} className="relative">
+                <div className="w-14 h-14 border-2 border-[#E8A33D]/40 bg-[#0F1115] flex items-center justify-center mb-4 mx-auto relative z-10">
+                  <item.icon className="w-6 h-6 text-[#E8A33D]" />
+                </div>
+                <p className="font-mono text-[11px] text-[#5B8C7B] text-center mb-1">{item.tag}</p>
+                <h3 className="text-lg font-semibold text-center mb-2">{item.title}</h3>
+                <p className="text-[#9C9A8F] text-sm text-center leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-14 text-center">
+            <Link href="/contact">
+              <button className="group px-8 py-3.5 font-semibold text-[#0F1115] bg-[#E8A33D] hover:bg-[#F0B155] transition-all hover:-translate-y-0.5 inline-flex items-center gap-2">
+                Start With Your Project
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================
+      ABOUT
+      ============================================ */}
+      <section className="py-24 px-4 relative border-t border-[#E8A33D]/10">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-14 items-center">
+            <div>
+              <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#E8A33D] mb-3">// why me</p>
+              <h2 className="text-4xl font-bold mb-5 tracking-tight">
+                Not a template shop. <span className="text-[#E8A33D]">A real build.</span>
+              </h2>
+              <p className="text-[#9C9A8F] text-lg leading-relaxed">
+                Most "project help" sites hand you copy-pasted code that breaks the moment you're
+                asked a question about it. I build every project properly, and help connect students
+                to internship opportunities along the way.
+              </p>
+              <div className="mt-8 grid grid-cols-2 gap-4">
+                <div className="p-5 border border-[#E8A33D]/15 hover:border-[#E8A33D]/40 transition-all">
+                  <Wrench className="w-5 h-5 text-[#E8A33D] mb-2" />
+                  <p className="font-semibold">Built by me</p>
+                  <p className="text-sm text-[#7A786F]">Not outsourced</p>
+                </div>
+                <div className="p-5 border border-[#E8A33D]/15 hover:border-[#E8A33D]/40 transition-all">
+                  <Briefcase className="w-5 h-5 text-[#E8A33D] mb-2" />
+                  <p className="font-semibold">Internship path</p>
+                  <p className="text-sm text-[#7A786F]">Beyond the project</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="relative border border-[#E8A33D]/20 group overflow-hidden">
+              <Image
+                src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=1400&q=80"
+                alt="Building a project"
+                width={700}
+                height={580}
+                className="w-full h-full object-cover grayscale-[60%] transition-all duration-700 group-hover:grayscale-0"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0F1115] via-transparent to-transparent"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================
+      WHAT I BUILD
+      ============================================ */}
+      <section className="py-24 px-4 relative border-t border-[#E8A33D]/10">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-14">
+            <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#E8A33D] mb-3">// scope</p>
+            <h2 className="text-4xl font-bold mb-4 tracking-tight">Whatever your project needs</h2>
+            <p className="text-[#9C9A8F]">From a single assignment to a full product</p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              { icon: Code, title: 'Programming Projects', desc: 'Web, mobile, desktop — built from scratch', img: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=900&q=80' },
+              { icon: Database, title: 'Research & Analysis', desc: 'Papers, case studies, data analysis', img: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=900&q=80' },
+              { icon: Brain, title: 'AI & ML Projects', desc: 'Real models, not black-box templates', img: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=900&q=80' },
+              { icon: Cpu, title: 'Database Design', desc: 'SQL, NoSQL, full system architecture', img: 'https://images.unsplash.com/photo-1544383835-bda2bc66a55d?auto=format&fit=crop&w=900&q=80' },
+              { icon: Award, title: 'Final-Year Projects', desc: 'Complete capstone builds', img: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=900&q=80' },
+              { icon: Globe, title: 'College Events', desc: 'Hackathon & competition support', img: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=900&q=80' },
+            ].map((s) => (
+              <Link href="/contact" key={s.title}>
+                <div className="group relative border border-[#E8A33D]/15 hover:border-[#E8A33D]/50 transition-all duration-300 cursor-pointer overflow-hidden">
+                  <div className="relative h-40 overflow-hidden">
+                    <Image src={s.img} alt={s.title} fill className="object-cover grayscale-[55%] transition-all duration-700 group-hover:grayscale-0 group-hover:scale-105" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0F1115] via-[#0F1115]/20 to-transparent"></div>
+                  </div>
+                  <div className="p-6 pt-4">
+                    <div className="w-11 h-11 border border-[#E8A33D]/40 flex items-center justify-center mb-3 -mt-12 relative z-10 bg-[#0F1115]">
+                      <s.icon className="w-5 h-5 text-[#E8A33D]" />
+                    </div>
+                    <h3 className="text-xl font-semibold mb-2">{s.title}</h3>
+                    <p className="text-[#9C9A8F] text-sm">{s.desc}</p>
+                    <div className="mt-4 text-sm font-mono opacity-0 group-hover:opacity-100 transition-opacity text-[#E8A33D]">
+                      → discuss this
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================
+      CTA
+      ============================================ */}
+      <section className="py-28 px-4 relative border-t border-[#E8A33D]/10">
+        <div className="max-w-3xl mx-auto text-center">
+          <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#E8A33D] mb-4">// let's talk</p>
+          <h2 className="text-4xl font-bold mb-4 tracking-tight">Have a project in mind?</h2>
+          <p className="text-[#9C9A8F] text-lg mb-9 max-w-xl mx-auto">
+            Send me the details — deadline, requirements, whatever you've got. I'll tell you honestly
+            what it takes and what it'll cost.
+          </p>
+          <Link href="/contact">
+            <button className="group px-10 py-4 font-semibold text-[#0F1115] bg-[#E8A33D] hover:bg-[#F0B155] transition-all hover:-translate-y-0.5 inline-flex items-center gap-2">
+              Contact Me Now
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </button>
+          </Link>
+        </div>
+      </section>
+
+      <style jsx global>{`
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        @keyframes blink { 0%,49% { opacity: 1; } 50%,100% { opacity: 0; } }
+        .animate-blink { animation: blink 1s step-end infinite; }
+      `}</style>
     </div>
-  );
+  )
 }

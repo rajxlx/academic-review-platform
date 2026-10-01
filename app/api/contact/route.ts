@@ -1,7 +1,7 @@
-﻿import { run, query } from '@/lib/db';
+import { run, query } from '@/lib/db';
 import { NextResponse } from 'next/server';
 
-export async function POST(request) {
+export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { full_name, email, phone, service_needed, message } = body;
@@ -13,7 +13,7 @@ export async function POST(request) {
       }, { status: 400 });
     }
 
-    const result = run(
+    const result: any = await run(
       'INSERT INTO messages (full_name, email, phone, service_needed, message) VALUES (?, ?, ?, ?, ?)',
       [full_name, email, phone || '', service_needed || '', message]
     );
@@ -23,7 +23,7 @@ export async function POST(request) {
       message: 'Thank you! We will get back to you soon.',
       id: result.lastInsertRowid 
     });
-  } catch (error) {
+  } catch (error: any) {
     return NextResponse.json({ 
       success: false, 
       error: error.message 
@@ -33,9 +33,9 @@ export async function POST(request) {
 
 export async function GET() {
   try {
-    const messages = query('SELECT * FROM messages ORDER BY created_at DESC');
+    const messages: any = await query('SELECT * FROM messages ORDER BY created_at DESC');
     return NextResponse.json({ success: true, messages });
-  } catch (error) {
+  } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }

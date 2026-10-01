@@ -1,20 +1,18 @@
-﻿'use client'
-
+'use client'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Lock, Eye, EyeOff } from 'lucide-react'
+import { Lock, ArrowRight, AlertCircle } from 'lucide-react'
 
-export default function AdminLogin() {
+export default function AdminLoginPage() {
   const router = useRouter()
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setLoading(true)
     setError('')
+    setLoading(true)
 
     try {
       const res = await fetch('/api/admin/login', {
@@ -22,76 +20,67 @@ export default function AdminLogin() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password })
       })
-
       const data = await res.json()
-
       if (data.success) {
-        router.push('/admin/messages')
+        router.push('/admin')
       } else {
-        setError('Invalid password. Please try again.')
+        setError(data.error || 'Invalid password')
       }
     } catch (err) {
-      setError('Login failed. Please try again.')
+      setError('Something went wrong. Please try again.')
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen bg-[#0A0E17] flex items-center justify-center py-20 px-4">
-      <div className="max-w-md w-full">
-        <div className="bg-[#111827] rounded-2xl p-8 border border-[#1E293B]">
+    <div className="min-h-screen bg-[#0F1115] text-[#EDE6D6] flex items-center justify-center py-16 px-4 relative overflow-hidden" style={{ fontFamily: "'Space Grotesk', system-ui, sans-serif" }}>
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#E8A33D08_1px,transparent_1px),linear-gradient(to_bottom,#E8A33D08_1px,transparent_1px)] bg-[size:40px_40px]"></div>
+      <div className="relative z-10 max-w-md w-full">
+        <div className="border border-[#E8A33D]/20 bg-black/30 backdrop-blur-sm p-8 md:p-10">
           <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <Lock className="w-8 h-8 text-white" />
-            </div>
-            <h1 className="text-2xl font-bold text-white">Admin Login</h1>
-            <p className="text-gray-400 text-sm mt-1">Enter your password to access messages</p>
+            <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#E8A33D] mb-3">// admin portal</p>
+            <h2 className="text-3xl font-bold tracking-tight">Admin Access</h2>
+            <p className="mt-2 text-[#9C9A8F] text-sm">Enter password to manage platform</p>
           </div>
 
           {error && (
-            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-sm">
+            <div className="flex items-center gap-2 mb-5 p-3 bg-red-500/10 border border-red-500/30 text-red-300 text-sm">
+              <AlertCircle className="w-4 h-4 flex-shrink-0" />
               {error}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form className="space-y-5" onSubmit={handleSubmit}>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1">Password</label>
+              <label className="block text-xs font-mono text-[#9C9A8F] mb-1.5 uppercase tracking-wide">Admin Password</label>
               <div className="relative">
+                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7A786F]" />
                 <input
-                  type={showPassword ? 'text' : 'password'}
+                  type="password"
                   required
-                  className="w-full px-4 py-3 bg-[#0A0E17] border border-[#1E293B] rounded-xl text-white placeholder-gray-500 focus:border-blue-500 focus:outline-none transition pr-12"
+                  className="w-full pl-11 pr-4 py-3 bg-black/30 border border-[#E8A33D]/20 text-[#EDE6D6] placeholder-[#5A5850] focus:outline-none focus:border-[#E8A33D]/60 transition-all"
                   placeholder="Enter admin password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300"
-                >
-                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                </button>
               </div>
             </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl font-semibold text-white hover:shadow-lg hover:shadow-blue-500/25 transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? 'Checking...' : 'Access Admin Panel'}
+            <button type="submit" disabled={loading} className="w-full mt-2 py-3.5 font-semibold text-[#0F1115] bg-[#E8A33D] hover:bg-[#F0B155] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+              {loading ? (
+                <>
+                  <span className="w-4 h-4 border-2 border-[#0F1115]/40 border-t-[#0F1115] rounded-full animate-spin"></span>
+                  Authenticating...
+                </>
+              ) : (
+                <>
+                  Enter Admin Dashboard
+                  <ArrowRight className="w-4 h-4" />
+                </>
+              )}
             </button>
           </form>
-
-          <div className="mt-6 text-center">
-            <p className="text-gray-500 text-xs">
-              Default password: <span className="text-gray-400 font-mono">admin123</span>
-            </p>
-            <p className="text-gray-600 text-xs mt-1">Change this in the API file</p>
-          </div>
         </div>
       </div>
     </div>
