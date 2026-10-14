@@ -1,9 +1,14 @@
-const messages: any[] = [];
-export function query(sql: string, params: any[] = []) { return Promise.resolve([]); }
-export function get(sql: string, params: any[] = []) { return Promise.resolve(null); }
-export function run(sql: string, params: any[] = []) { 
-  const id = messages.length + 1;
-  messages.push({ id, ...params });
-  return Promise.resolve({ lastInsertRowid: id }); 
+// TEMPORARY STUB — replace with Turso/Supabase before going live.
+export function query(sql: string, params: any[] = []): Promise<any[]> {
+  console.warn("[db-stub] query() called");
+  return Promise.resolve([]);
+}
+export function get(sql: string, params: any[] = []): Promise<any> {
+  console.warn("[db-stub] get() called");
+  return Promise.resolve(null);
+}
+export function run(sql: string, params: any[] = []): Promise<{ lastInsertRowid: number }> {
+  console.warn("[db-stub] run() called");
+  return Promise.resolve({ lastInsertRowid: 0 });
 }
 export default { query, get, run };
